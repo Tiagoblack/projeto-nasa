@@ -1,104 +1,62 @@
 import { Component } from 'react';
 import './App.css';
-import nasa from './screen/nasa.png';
+
+
+import Modal from './component/Modal';
+import Header from './component/header';
+import SearchNasa from '../src/component/SearchNasa';
+import ListNasa from '../src/component/ListNasa';
+import api from './api';
 
 
 
 
 class App extends Component {
-
   state = {
     dados: [],
-    data: '',
-    mostrarPesquisa: false,
-    estado: ''
+    mostrarPesquisa: 'nosearch',
+    mostrarModal:false,
+    object:{},
+    estado:{},
   }
-  componentDidMount() {
-    this.Req();
+  async componentDidMount() {
+    const res = await api.getData()
+    this.setState({ dados: res });
   }
 
-
-
-
-
-  Req = async () => {
-    const url = `api_key=unct9EBsqvh1ZnGAUyyqNcBcjNd5wC8cBs7UESTV`;
-    const date = await fetch(`https://api.nasa.gov/planetary/apod?${url}&count=100`);
-    const [dados] = await Promise.all([date])
-    const endereço = await dados.json()
-    this.setState({ dados: endereço });
-
-
+  dateFecth = async(event)=>{
+    let  res = await api.getDate(event) 
+    this.setState({ 
+      estado: res, 
+      mostrarPesquisa: 'search',
+    });
   }
 
 
+   handleClickModal  (obj){
+    this.setState({object:obj, mostrarModal:true}); 
+
+}
+ 
 
   render() {
-    const { dados, data, mostrarPesquisa, estado } = this.state;
-    console.log(dados);
-    Object.values(dados)
-
+    const { dados,  mostrarPesquisa, estado, mostrarModal, object } = this.state;
     return (
       <div className="App">
-        <header>
-          <div className="header-container">
-            <nav className="header-menu">
-              <img src={nasa} />
-            </nav>
-            <div className="container-menu">
-              <a
-                className="header-home"
-                onClick={() => { this.setState({ mostrarPesquisa: false }) }}
-              >Home</a>
-              <input type="date" className="input--date" onChange={async (event) => {
-                this.setState({ data: event.target.value });
-                const url = `api_key=unct9EBsqvh1ZnGAUyyqNcBcjNd5wC8cBs7UESTV`;
-                const getApi = await fetch(`https://api.nasa.gov/planetary/apod?${url}&date=${data}`);
-
-                if (getApi.status === 200) {
-                  const endereço = await getApi.json();
-                  this.setState({ estado: endereço, mostrarPesquisa: true });
-                } else {
-                  alert('Não exite essa data');
-                }
-              }} />
-            </div>
-          </div>
-        </header>
+          <Header  hendleDateNasa={(e)=>this.dateFecth(e)}/>
         <section>
           <div className="container--geral">
-            {mostrarPesquisa === false ? dados.map((dado, index) => (
-              <div key={index} className="container--dado">
-                <div className="face">
-                  <div className="container">
-                    <h1 className="container--title">{dado.title}</h1>
-                    <span className="container--date">{dado.date}</span>
-                    <div className="container--img">
-                      <img src={dado.url} alt={dado.title} />
-                    </div>
-                  </div>
-                  <p className="container-desc">{dado.explanation}</p>
-                </div>
-              </div>
-            )) : ''}
-            <section>
-              {mostrarPesquisa === true ?
-                <div className="container--dado">
-                  <div className="face">
-                    <div className="container">
-                      <h1 className="container--title">{estado.title}</h1>
-                      <span className="container--date">{estado.date}</span>
-                      <div className="container--img">
-                        <img src={estado.url} alt={dados.title} />
-                      </div>
-                    </div>
-                    <p className="container-desc">{estado.explanation}</p>
-                  </div>
-                </div>
-                : ''}
-            </section>
+            {mostrarPesquisa === 'nosearch' && dados.map((dado, index, array)=>(
+                <ListNasa onClick={()=>this.handleClickModal(array[index])} dado={dado}/>
+            ))}
           </div>
+          {mostrarPesquisa === 'search' && <SearchNasa estado={estado} /> }
         </section>
+        {mostrarModal &&
+         <Modal 
+         object={object} 
+          onClick={()=>this.setState({mostrarModal:false})}
+         />}
       </div >
     )
 

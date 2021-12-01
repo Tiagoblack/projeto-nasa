@@ -7,12 +7,7 @@ import nasa from '../screen/nasa.png';
 class Header extends Component{
     constructor(props){
         super(props)
-        this.state={
-            data:'',
-         
-         
 
-        }
       }
 
       handleClick = (event)=>{

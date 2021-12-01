@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 
-
+// eslint-disable-next-line
 class SearchNasa extends Component{
-    
+    constructor(props){
+        super(props)
+    }
     render(){
-        const {data, estado} = this.props;
+        const { estado} = this.props;
         return(
         <section className="date_container">
             <div className="date_content">

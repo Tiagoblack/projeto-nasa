@@ -1,3 +1,5 @@
+
+// eslint-disable-next-line
 export default {
     getData: async()=>{
         let  url = `api_key=unct9EBsqvh1ZnGAUyyqNcBcjNd5wC8cBs7UESTV`;

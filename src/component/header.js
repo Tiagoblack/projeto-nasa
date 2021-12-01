@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import nasa from '../screen/nasa.png';
 
-
+// eslint-disable-next-line
 class Header extends Component{
     constructor(props){
         super(props)
@@ -27,7 +27,7 @@ class Header extends Component{
             <header>
             <div className="header-container">
               <nav className="header-menu">
-                <img src={nasa} />
+                <img src={nasa}  alt="logo da nasa"/>
               </nav>
               <div className="container-menu">
                 <a

@@ -10,7 +10,7 @@ import api from './api';
 
 
 
-
+// eslint-disable-next-line
 class App extends Component {
   state = {
     dados: [],
@@ -30,7 +30,7 @@ class App extends Component {
       estado: res, 
       mostrarPesquisa: 'search',
     });
-  }
+  }               
 
 
    handleClickModal  (obj){
